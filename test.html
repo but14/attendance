@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Công cụ So sánh Giải pháp Máy chấm công Face ID</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+      }
+      th,
+      td {
+        border: 1px solid #e2e8f0;
+        padding: 10px;
+        vertical-align: top;
+        text-align: left;
+      }
+      th {
+        background-color: #f8fafc;
+        font-weight: 600;
+      }
+      td {
+        background-color: #ffffff;
+      }
+      .tab-content {
+        display: none;
+      }
+      .tab-content.active {
+        display: block;
+      }
+      /* --- Updated Tab Button Styles --- */
+      .tab-btn {
+        background-color: transparent;
+        border: 0;
+        border-bottom: 2px solid transparent;
+        cursor: pointer;
+        padding: 1rem 0.75rem;
+        margin-bottom: -1px; /* Overlap the container's border */
+        font-size: 0.825rem;
+        font-weight: 400; /* Normal weight */
+        color: #4b5563; /* text-gray-600 */
+        transition: all 150ms;
+      }
+      .tab-btn:hover {
+        color: #2563eb;
+      }
+      .tab-btn.active {
+        border-color: #2563eb;
+        color: #2563eb;
+        font-weight: 500; /* Medium weight for active */
+      }
+      td[contenteditable="true"] {
+        background-color: #fefce8;
+      }
+      td[contenteditable="true"]:focus {
+        outline: 2px solid #3b82f6;
+        background-color: #ffffff;
+      }
+      .chart-container {
+        border: 1px solid #e2e8f0;
+        padding: 1rem;
+        border-radius: 0.75rem;
+        background-color: #fff;
+      }
+      .evaluation-basis {
+        font-size: 0.8rem;
+        color: #475569;
+        background-color: #f1f5f9 !important;
+        padding: 6px 10px;
+      }
+      .group-score-display {
+        font-weight: bold;
+      }
+      .group-score-display .max-score {
+        color: #64748b;
+        font-weight: normal;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 text-gray-800 p-4 sm:p-6 md:p-8">
+    <div class="max-w-7xl mx-auto bg-white rounded-xl shadow-lg p-6">
+      <div
+        class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6"
+      >
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900">
+            Công cụ So sánh Giải pháp Máy chấm công Face ID
+          </h1>
+          <p class="mt-1 text-gray-500">
+            Đánh giá toàn diện về phần cứng, phần mềm, chi phí và hỗ trợ.
+          </p>
+        </div>
+        <button
+          id="export-btn"
+          class="mt-4 sm:mt-0 w-full sm:w-auto bg-blue-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700 transition duration-300 flex items-center justify-center"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 mr-2"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              d="M10.75 2.75a.75.75 0 00-1.5 0v8.614L6.295 8.235a.75.75 0 10-1.09 1.03l4.25 4.5a.75.75 0 001.09 0l4.25-4.5a.75.75 0 10-1.09-1.03l-2.905 3.079V2.75z"
+            />
+            <path
+              d="M3.5 12.75a.75.75 0 00-1.5 0v2.5A2.75 2.75 0 004.75 18h10.5A2.75 2.75 0 0018 15.25v-2.5a.75.75 0 00-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5z"
+            />
+          </svg>
+          Xuất ra Excel
+        </button>
+      </div>
+
+      <!-- Tab buttons -->
+      <div class="border-b border-gray-200 mb-6">
+        <nav class="flex flex-wrap -mb-px" aria-label="Tabs">
+          <button class="tab-btn active" data-tab="tab0">0. Chú tích</button>
+          <button class="tab-btn" data-tab="tab1">1. Thông tin chung</button>
+          <button class="tab-btn" data-tab="tab2">2. Bảng Chấm Điểm</button>
+          <button class="tab-btn" data-tab="tab3">
+            3. Phần cứng & Tính năng
+          </button>
+          <button class="tab-btn" data-tab="tab4">
+            4. Phần mềm & Tích hợp
+          </button>
+          <button class="tab-btn" data-tab="tab5">5. Chi phí</button>
+          <button class="tab-btn" data-tab="tab6">6. Hỗ trợ & Bảo hành</button>
+          <button class="tab-btn" data-tab="tab7">7. Dashboard</button>
+          <button class="tab-btn" data-tab="tab8">8. Đánh giá SWOT</button>
+        </nav>
+      </div>
+
+      <!-- Tab content -->
+      <div id="tab-container" class="overflow-x-auto">
+        <div id="tab0" class="tab-content active prose max-w-none">
+          <h3 class="font-semibold">0. Chú thích</h3>
+          <p>
+            Công cụ này được thiết kế để giúp bạn đánh giá và lựa chọn giải pháp
+            máy chấm công Face ID phù hợp nhất thông qua một quy trình có hệ
+            thống.
+          </p>
+          <ol class="list-decimal list-inside">
+            <li>
+              Bắt đầu bằng cách điền thông tin chung về các nhà cung cấp và
+              thiết bị ở <strong>Tab 1</strong>.
+            </li>
+            <li>
+              Điền các thông số chi tiết vào các tab
+              <strong>3, 4, 5, 6</strong>.
+            </li>
+            <li>
+              Vào <strong>Tab 2 - Bảng Chấm Điểm</strong>, cho điểm từng tiêu
+              chí con (thang 0-10) dựa trên thông tin đã thu thập. Điểm số tổng
+              hợp sẽ tự động tính toán.
+            </li>
+            <li>
+              Cuối cùng, vào <strong>Tab 7 - Dashboard</strong> và nhấn "Cập
+              nhật" để xem các biểu đồ phân tích trực quan.
+            </li>
+            <li>Nhấn nút "Xuất ra Excel" để lưu lại báo cáo.</li>
+          </ol>
+        </div>
+
+        <div id="tab1" class="tab-content">
+          <h3 class="font-semibold mb-2">
+            1. Thông tin chung về Nhà cung cấp & Giải pháp
+          </h3>
+          <table id="table-1" class="w-full text-sm"></table>
+        </div>
+        <div id="tab2" class="tab-content">
+          <h3 class="font-semibold mb-2">2. Bảng Chấm Điểm Tổng Hợp</h3>
+          <p class="text-sm text-gray-500 mb-4">
+            Chấm điểm cho từng tiêu chí con (thang 0-10). Điểm nhóm và Tổng điểm
+            sẽ được tự động tính toán.
+          </p>
+          <table id="table-2" class="w-full text-sm"></table>
+        </div>
+        <div id="tab3" class="tab-content">
+          <h3 class="font-semibold mb-2">
+            3. Thông số Phần cứng & Tính năng Nhận diện
+          </h3>
+          <table id="table-3" class="w-full text-sm"></table>
+        </div>
+        <div id="tab4" class="tab-content">
+          <h3 class="font-semibold mb-2">
+            4. Tính năng Phần mềm & Khả năng Tích hợp
+          </h3>
+          <table id="table-4" class="w-full text-sm"></table>
+        </div>
+        <div id="tab5" class="tab-content">
+          <h3 class="font-semibold mb-2">5. Phân tích Chi phí</h3>
+          <table id="table-5" class="w-full text-sm"></table>
+        </div>
+        <div id="tab6" class="tab-content">
+          <h3 class="font-semibold mb-2">6. Thông tin về Hỗ trợ & Bảo hành</h3>
+          <table id="table-6" class="w-full text-sm"></table>
+        </div>
+
+        <div id="tab7" class="tab-content">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-semibold text-xl">
+              7. Dashboard - Bảng điều khiển Trực quan
+            </h3>
+            <button
+              id="update-charts-btn"
+              class="bg-green-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-green-700 transition duration-300 flex items-center"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 mr-2"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M15.312 11.424a5.5 5.5 0 01-9.201-4.46_5.5 5.5 0 011.643-1.644l.11-.112a.75.75 0 011.06 1.06l-.11.112a4 4 0 00-1.196 1.196 4.002 4.002 0 006.585 3.235l.233.233A5.5 5.5 0 0115.312 11.424zM18.75 13a.75.75 0 01-.75.75h-3.5a.75.75 0 010-1.5h2.323l-3.3-3.3a.75.75 0 111.06-1.06l3.3 3.3V8.5a.75.75 0 011.5 0v3.75c0 .414-.336.75-.75.75z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              Cập nhật Biểu đồ & Bảng
+            </button>
+          </div>
+          <div class="space-y-8">
+            <div class="chart-container">
+              <h4 class="font-bold text-center mb-4">Bảng xếp hạng tổng thể</h4>
+              <table id="table-7-summary" class="w-full text-sm"></table>
+            </div>
+            <div class="chart-container">
+              <h4 class="font-bold text-center mb-2">
+                So sánh Giá trị: Năng lực vs. Chi phí
+              </h4>
+              <canvas id="valueChart"></canvas>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div class="chart-container">
+                <h4 class="font-bold text-center mb-2">
+                  So sánh Hiệu năng Phần cứng
+                </h4>
+                <canvas id="hardwareChart"></canvas>
+              </div>
+              <div class="chart-container">
+                <h4 class="font-bold text-center mb-2">
+                  So sánh Năng lực Phần mềm
+                </h4>
+                <canvas id="softwareChart"></canvas>
+              </div>
+              <div class="chart-container">
+                <h4 class="font-bold text-center mb-2">So sánh Chi phí</h4>
+                <canvas id="costChart"></canvas>
+              </div>
+              <div class="chart-container">
+                <h4 class="font-bold text-center mb-2">
+                  So sánh Hỗ trợ & Bảo hành
+                </h4>
+                <canvas id="supportChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="tab8" class="tab-content">
+          <h3 class="font-semibold mb-2">8. Phân tích SWOT</h3>
+          <table id="table-8-swot" class="w-full text-sm"></table>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const sampleData = {
+        vendors: ["Ronald Jack", "ZKTeco", "Hikvision", "Suprema"],
+        "table-1": [
+          ["Hạng mục", "NCC A", "NCC B", "NCC C", "NCC D"],
+          ["Nhà cung cấp", "Công ty A", "Công ty B", "Công ty C", "Công ty D"],
+          [
+            "Model thiết bị",
+            "",
+            "",
+            "",
+            "",
+          ],
+        ],
+        "table-2-scores": {
+          "Ronald Jack": {
+            A1: 7,
+            A2: 8,
+            A3: 7,
+            B1: 7,
+            B2: 8,
+            B3: 6,
+            C1: 9,
+            C2: 8,
+            D1: 8,
+            D2: 7,
+          },
+          ZKTeco: {
+            A1: 8,
+            A2: 8,
+            A3: 9,
+            B1: 8,
+            B2: 8,
+            B3: 8,
+            C1: 8,
+            C2: 8,
+            D1: 8,
+            D2: 8,
+          },
+          Hikvision: {
+            A1: 9,
+            A2: 9,
+            A3: 8,
+            B1: 8,
+            B2: 7,
+            B3: 9,
+            C1: 7,
+            C2: 7,
+            D1: 7,
+            D2: 8,
+          },
+          Suprema: {
+            A1: 10,
+            A2: 10,
+            A3: 9,
+            B1: 9,
+            B2: 9,
+            B3: 9,
+            C1: 6,
+            C2: 7,
+            D1: 9,
+            D2: 9,
+          },
+        },
+        "table-3": [
+          ["Hạng mục", "Ronald Jack", "ZKTeco", "Hikvision", "Suprema"],
+          [
+            "Tốc độ nhận diện",
+            "",
+            "",
+            "< 0.2 giây",
+            "< 0.5 giây",
+          ],
+          ["Độ chính xác", "> 99%", "> 99.7%", "> 99%", "> 99.9%"],
+          ["Dung lượng khuôn mặt", "1,000", "6,000", "10,000", "50,000"],
+          ["Dung lượng bản ghi", "100,000", "200,000", "150,000", "5,000,000"],
+          ["Nhận diện đeo khẩu trang", "Có", "Có", "Có", "Có (AI thế hệ mới)"],
+          [
+            "Chống giả mạo (ảnh, video)",
+            "Cơ bản",
+            "Có (Live Face Detection)",
+            "Có",
+            "Có (Live Face Detection)",
+          ],
+          ["Kết nối kiểm soát cửa", "Có", "Có", "Có", "Có"],
+        ],
+        "table-4": [
+          ["Hạng mục", "Ronald Jack", "ZKTeco", "Hikvision", "Suprema"],
+          [
+            "Phần mềm quản lý",
+            "Ronald Jack Pro",
+            "ZKBioTime / BioAccess",
+            "iVMS-4200",
+            "BioStar 2",
+          ],
+          [
+            "Quản lý ca làm việc",
+            "Cơ bản",
+            "Linh hoạt",
+            "Linh hoạt",
+            "Rất linh hoạt",
+          ],
+          ["Báo cáo tùy chỉnh", "Hạn chế", "Có", "Có", "Mạnh"],
+          [
+            "Tích hợp hệ thống khác (API)",
+            "Không",
+            "Có (Push SDK)",
+            "Có (SDK)",
+            "Có (API, SDK)",
+          ],
+          [
+            "Ứng dụng di động",
+            "Không",
+            "Có (ZKBio)",
+            "Có (Hik-Connect)",
+            "Có (Airfob Pass)",
+          ],
+        ],
+        "table-5": [
+          [
+            "Khoản mục chi phí",
+            "Ronald Jack",
+            "ZKTeco",
+            "Hikvision",
+            "Suprema",
+          ],
+          [
+            "Chi phí thiết bị (VND)",
+            "3,500,000",
+            "8,000,000",
+            "12,000,000",
+            "25,000,000",
+          ],
+          [
+            "Chi phí bản quyền phần mềm",
+            "Miễn phí",
+            "Miễn phí (bản cơ bản)",
+            "Miễn phí",
+            "Theo gói",
+          ],
+          [
+            "Chi phí lắp đặt & triển khai",
+            "500,000",
+            "1,000,000",
+            "1,500,000",
+            "2,000,000",
+          ],
+        ],
+        "table-6": [
+          ["Hạng mục", "Ronald Jack", "ZKTeco", "Hikvision", "Suprema"],
+          [
+            "Thời gian bảo hành",
+            "12 tháng",
+            "12 tháng",
+            "24 tháng",
+            "24 tháng",
+          ],
+          [
+            "Chính sách 1 đổi 1",
+            "30 ngày (nếu lỗi NSX)",
+            "Không",
+            "7 ngày (nếu lỗi NSX)",
+            "Theo chính sách NPP",
+          ],
+          [
+            "Hỗ trợ kỹ thuật",
+            "Giờ hành chính",
+            "Giờ hành chính",
+            "Giờ hành chính",
+            "Hỗ trợ chuyên sâu từ hãng",
+          ],
+        ],
+        "table-8-swot": [
+          ["Phân tích", "Ronald Jack", "ZKTeco", "Hikvision", "Suprema"],
+          [
+            "Strengths (Điểm mạnh)",
+            "Chi phí đầu tư thấp nhất, dễ tiếp cận.\nPhần mềm miễn phí.",
+            "Cân bằng tốt nhất giữa chi phí và hiệu năng.\nPhần mềm linh hoạt, có API.",
+            "Hiệu năng phần cứng tốt (đặc biệt là tốc độ).\nBảo hành 24 tháng.",
+            "Hiệu năng phần cứng và phần mềm dẫn đầu thị trường.\nKhả năng tích hợp mạnh mẽ nhất.",
+          ],
+          [
+            "Weaknesses (Điểm yếu)",
+            "Hiệu năng phần cứng (tốc độ, dung lượng) thấp nhất.\nKhông có API/SDK để tích hợp.",
+            "Dung lượng và độ chính xác không bằng các dòng cao cấp.",
+            "Chi phí cao hơn ZKTeco.\nPhần mềm quản lý ca chưa mạnh bằng Suprema.",
+            "Chi phí đầu tư cao nhất.\nPhần mềm có thể yêu cầu bản quyền theo gói.",
+          ],
+          [
+            "Opportunities (Cơ hội)",
+            "Phù hợp cho các văn phòng nhỏ, không yêu cầu cao về quản lý và tích hợp.",
+            "Lựa chọn 'giá trị nhất' cho phần lớn các doanh nghiệp vừa và lớn.",
+            "Phù hợp cho các dự án yêu cầu cao về an ninh và tốc độ (tích hợp camera, kiểm soát cửa).",
+            "Lựa chọn hàng đầu cho các tập đoàn lớn, dự án chính phủ, yêu cầu bảo mật cao.",
+          ],
+          [
+            "Threats (Thách thức)",
+            "Khó mở rộng trong tương lai.\nDễ bị thay thế khi nhu cầu của công ty tăng lên.",
+            "Cạnh tranh gay gắt từ Hikvision ở phân khúc cao hơn một chút.",
+            "Cạnh tranh về giá với ZKTeco và về tính năng cao cấp với Suprema.",
+            "Rào cản về chi phí lớn, không phù hợp với thị trường phổ thông.",
+          ],
+        ],
+      };
+
+      document.addEventListener("DOMContentLoaded", function () {
+        function createScoringTable() {
+          const table = document.getElementById("table-2");
+          const vendors = sampleData.vendors;
+          const scores = sampleData["table-2-scores"];
+
+          const structure = [
+            {
+              key: "A",
+              title: "A. PHẦN CỨNG & HIỆU NĂNG",
+              weight: 40,
+              children: [
+                {
+                  key: "A1",
+                  title: "1. Tốc độ & Độ chính xác",
+                  weight: 15,
+                  basis: "Tốc độ nhận diện: ",
+                },
+                {
+                  key: "A2",
+                  title:
+                    "2. Nhận diện trong điều kiện khó (khẩu trang, thiếu sáng)",
+                  weight: 15,
+                },
+                {
+                  key: "A3",
+                  title: "3. Dung lượng lưu trữ (khuôn mặt, bản ghi)",
+                  weight: 10,
+                  basis: "Dung lượng khuôn mặt: ",
+                },
+              ],
+            },
+            {
+              key: "B",
+              title: "B. PHẦN MỀM & QUẢN LÝ",
+              weight: 30,
+              children: [
+                {
+                  key: "B1",
+                  title: "1. Giao diện & Tính năng phần mềm quản lý",
+                  weight: 10,
+                },
+                {
+                  key: "B2",
+                  title: "2. Hệ thống báo cáo & quản lý ca",
+                  weight: 10,
+                },
+                {
+                  key: "B3",
+                  title: "3. Khả năng tích hợp (API/SDK)",
+                  weight: 10,
+                  basis: "Hỗ trợ API/SDK: ",
+                },
+              ],
+            },
+            {
+              key: "C",
+              title: "C. CHI PHÍ",
+              weight: 15,
+              children: [
+                {
+                  key: "C1",
+                  title: "1. Chi phí thiết bị & lắp đặt",
+                  weight: 10,
+                  basis: "Tổng chi phí ban đầu: ",
+                },
+                {
+                  key: "C2",
+                  title: "2. Chi phí bản quyền phần mềm (nếu có)",
+                  weight: 5,
+                },
+              ],
+            },
+            {
+              key: "D",
+              title: "D. HỖ TRỢ & BẢO HÀNH",
+              weight: 15,
+              children: [
+                {
+                  key: "D1",
+                  title: "1. Thời gian & chính sách bảo hành",
+                  weight: 10,
+                  basis: "Thời gian bảo hành: ",
+                },
+                {
+                  key: "D2",
+                  title: "2. Chất lượng hỗ trợ kỹ thuật",
+                  weight: 5,
+                },
+              ],
+            },
+          ];
+
+          let headHTML = `<thead><tr><th>Tiêu chí đánh giá</th><th>Trọng số</th>`;
+          vendors.forEach((v) => (headHTML += `<th>${v}</th>`));
+          headHTML += `</tr></thead>`;
+
+          let bodyHTML = `<tbody>`;
+          structure.forEach((group) => {
+            bodyHTML += `<tr class="bg-gray-100 font-bold">
+                        <td>${group.title}</td>
+                        <td data-weight-group="${group.key}">${
+              group.weight
+            }</td>
+                        ${vendors
+                          .map(
+                            (v, i) =>
+                              `<td class="group-score-display" data-score-group="${group.key}" data-vendor-index="${i}"><span class="score">0.0</span> <span class="max-score">/ ${group.weight}</span></td>`
+                          )
+                          .join("")}
+                    </tr>`;
+            group.children.forEach((item) => {
+              bodyHTML += `<tr>
+                            <td class="pl-8">${item.title}</td>
+                            <td data-weight="${item.key}">${item.weight}</td>
+                            ${vendors
+                              .map(
+                                (v, i) =>
+                                  `<td data-score="${
+                                    item.key
+                                  }" data-vendor-index="${i}" contenteditable="true">${
+                                    scores[v]?.[item.key] || 0
+                                  }</td>`
+                              )
+                              .join("")}
+                        </tr>`;
+              if (item.basis) {
+                bodyHTML += `<tr><td colspan="${
+                  vendors.length + 2
+                }" class="evaluation-basis" data-basis-for="${item.key}">${
+                  item.basis
+                }</td></tr>`;
+              }
+            });
+          });
+          bodyHTML += `<tr class="font-bold bg-yellow-100 text-lg">
+                    <td>TỔNG CỘNG (Thang 100)</td>
+                    <td id="total-weight">100</td>
+                    ${vendors
+                      .map((v, i) => `<td id="total-score-${i}">0.0</td>`)
+                      .join("")}
+                 </tr>`;
+          bodyHTML += `</tbody>`;
+
+          table.innerHTML = headHTML + bodyHTML;
+        }
+
+        function populateSimpleTable(tableId, data) {
+          const table = document.getElementById(tableId);
+          if (!table || !data) return;
+          let html = `<thead><tr>${data[0]
+            .map((h) => `<th contenteditable="true">${h}</th>`)
+            .join("")}</tr></thead><tbody>`;
+          data.slice(1).forEach((row) => {
+            html += `<tr>${row
+              .map((cell, index) => {
+                const cellContent = cell.toString().replace(/\n/g, "<br>");
+                return `<td contenteditable="true">${cellContent}</td>`;
+              })
+              .join("")}</tr>`;
+          });
+          html += "</tbody>";
+          table.innerHTML = html;
+        }
+
+        function loadAllData() {
+          populateSimpleTable("table-1", sampleData["table-1"]);
+          createScoringTable();
+          populateSimpleTable("table-3", sampleData["table-3"]);
+          populateSimpleTable("table-4", sampleData["table-4"]);
+          populateSimpleTable("table-5", sampleData["table-5"]);
+          populateSimpleTable("table-6", sampleData["table-6"]);
+          populateSimpleTable("table-8-swot", sampleData["table-8-swot"]);
+        }
+
+        const tabs = document.querySelectorAll(".tab-btn");
+        tabs.forEach((tab) => {
+          tab.addEventListener("click", (e) => {
+            document
+              .querySelector(".tab-btn.active")
+              .classList.remove("active");
+            e.target.classList.add("active");
+            document
+              .querySelector(".tab-content.active")
+              .classList.remove("active");
+            document
+              .getElementById(e.target.dataset.tab)
+              .classList.add("active");
+          });
+        });
+
+        function getCellValue(selector) {
+          const element = document.querySelector(selector);
+          return element
+            ? parseFloat(element.innerText.replace(/[^0-9.-]+/g, "")) || 0
+            : 0;
+        }
+
+        function calculateScores() {
+          const numVendors = sampleData.vendors.length;
+          const vendors = Array.from({ length: numVendors }, (_, i) => i);
+          const groups = ["A", "B", "C", "D"];
+          let groupScores = Array(numVendors)
+            .fill(null)
+            .map(() => ({}));
+          let totalScores = Array(numVendors).fill(0);
+
+          vendors.forEach((vendorIndex) => {
+            let currentTotalScore = 0;
+            groups.forEach((groupKey) => {
+              let currentGroupScore = 0;
+              document
+                .querySelectorAll(
+                  `td[data-score][data-vendor-index="${vendorIndex}"]`
+                )
+                .forEach((cell) => {
+                  const scoreKey = cell.dataset.score;
+                  if (scoreKey.startsWith(groupKey)) {
+                    const weight = getCellValue(
+                      `td[data-weight="${scoreKey}"]`
+                    );
+                    const score = getCellValue(
+                      `td[data-score="${scoreKey}"][data-vendor-index="${vendorIndex}"]`
+                    );
+                    currentGroupScore += (score * weight) / 10;
+                  }
+                });
+
+              const groupScoreCell = document.querySelector(
+                `td[data-score-group="${groupKey}"][data-vendor-index="${vendorIndex}"] .score`
+              );
+              if (groupScoreCell)
+                groupScoreCell.innerText = (currentGroupScore / 10).toFixed(1);
+
+              const groupWeight = getCellValue(
+                `td[data-weight-group="${groupKey}"]`
+              );
+              groupScores[vendorIndex][groupKey] =
+                groupWeight > 0 ? (currentGroupScore / groupWeight) * 10 : 0;
+
+              currentTotalScore += currentGroupScore / 10;
+            });
+            totalScores[vendorIndex] = currentTotalScore;
+            const totalScoreCell = document.getElementById(
+              `total-score-${vendorIndex}`
+            );
+            if (totalScoreCell)
+              totalScoreCell.innerText = currentTotalScore.toFixed(1);
+          });
+          return { totalScores, groupScores };
+        }
+
+        function updateEvaluationBasis() {
+          const vendors = sampleData.vendors;
+
+          const speedData = sampleData["table-3"].find((r) =>
+            r[0].includes("Tốc độ")
+          );
+          document.querySelector('[data-basis-for="A1"]').innerHTML =
+            "<strong>Cơ sở (Tab 3):</strong> " +
+            vendors.map((v, i) => `${v}: ${speedData[i + 1]}`).join("; ");
+
+          const faceCapacityData = sampleData["table-3"].find((r) =>
+            r[0].includes("Dung lượng khuôn mặt")
+          );
+          document.querySelector('[data-basis-for="A3"]').innerHTML =
+            "<strong>Cơ sở (Tab 3):</strong> " +
+            vendors
+              .map((v, i) => `${v}: ${faceCapacityData[i + 1]}`)
+              .join("; ");
+
+          const apiData = sampleData["table-4"].find((r) =>
+            r[0].includes("Tích hợp")
+          );
+          document.querySelector('[data-basis-for="B3"]').innerHTML =
+            "<strong>Cơ sở (Tab 4):</strong> " +
+            vendors.map((v, i) => `${v}: ${apiData[i + 1]}`).join("; ");
+
+          const costDevice = sampleData["table-5"].find((r) =>
+            r[0].includes("thiết bị")
+          );
+          const costInstall = sampleData["table-5"].find((r) =>
+            r[0].includes("lắp đặt")
+          );
+          document.querySelector('[data-basis-for="C1"]').innerHTML =
+            "<strong>Cơ sở (Tab 5):</strong> " +
+            vendors
+              .map(
+                (v, i) =>
+                  `${v}: ${(
+                    parseInt(costDevice[i + 1].replace(/,/g, "")) +
+                    parseInt(costInstall[i + 1].replace(/,/g, ""))
+                  ).toLocaleString("vi-VN")}đ`
+              )
+              .join("; ");
+
+          const warrantyData = sampleData["table-6"].find((r) =>
+            r[0].includes("bảo hành")
+          );
+          document.querySelector('[data-basis-for="D1"]').innerHTML =
+            "<strong>Cơ sở (Tab 6):</strong> " +
+            vendors.map((v, i) => `${v}: ${warrantyData[i + 1]}`).join("; ");
+        }
+
+        let charts = {};
+        function updateDashboard() {
+          const vendorNames = sampleData.vendors;
+          const { totalScores, groupScores } = calculateScores();
+          const costDevice = sampleData["table-5"]
+            .find((r) => r[0].includes("thiết bị"))
+            .slice(1)
+            .map((c) => parseInt(c.replace(/,/g, "")));
+          const costInstall = sampleData["table-5"]
+            .find((r) => r[0].includes("lắp đặt"))
+            .slice(1)
+            .map((c) => parseInt(c.replace(/,/g, "")));
+          const totalCost = costDevice.map((c, i) => c + costInstall[i]);
+
+          Object.values(charts).forEach((chart) => chart.destroy());
+
+          const summaryTable = document.querySelector("#table-7-summary");
+          if (summaryTable) {
+            const vendorData = vendorNames
+              .map((name, index) => ({
+                name: name,
+                score: totalScores[index],
+                cost: totalCost[index],
+              }))
+              .sort((a, b) => b.score - a.score);
+
+            let summaryBodyHTML = "";
+            vendorData.forEach((vendor, index) => {
+              summaryBodyHTML += `<tr>
+                            <td class="text-center font-bold">${index + 1}</td>
+                            <td>${vendor.name}</td>
+                            <td>${vendor.score.toFixed(1)}</td>
+                            <td>${parseInt(vendor.cost).toLocaleString(
+                              "vi-VN"
+                            )}đ</td>
+                            <td contenteditable="true"></td>
+                        </tr>`;
+            });
+            summaryTable.innerHTML = `<thead><tr><th>Xếp hạng</th><th>Nhà cung cấp</th><th>Tổng điểm</th><th>Chi phí ban đầu</th><th>Ghi chú</th></tr></thead><tbody>${summaryBodyHTML}</tbody>`;
+          }
+
+          charts.valueChart = new Chart(
+            document.getElementById("valueChart").getContext("2d"),
+            {
+              type: "bar",
+              data: {
+                labels: vendorNames,
+                datasets: [
+                  {
+                    label: "Tổng điểm Năng lực (Thang 100)",
+                    data: totalScores,
+                    backgroundColor: "rgba(59, 130, 246, 0.7)",
+                    yAxisID: "y-score",
+                    order: 1,
+                  },
+                  {
+                    label: "Chi phí ban đầu (VND)",
+                    data: totalCost,
+                    backgroundColor: "rgba(239, 68, 68, 0.7)",
+                    yAxisID: "y-tco",
+                    order: 2,
+                  },
+                ],
+              },
+              options: {
+                responsive: true,
+                plugins: { tooltip: { mode: "index", intersect: false } },
+                scales: {
+                  "y-score": {
+                    type: "linear",
+                    position: "left",
+                    title: { display: true, text: "Điểm Năng lực" },
+                    min: 0,
+                    max: 100,
+                  },
+                  "y-tco": {
+                    type: "linear",
+                    position: "right",
+                    title: { display: true, text: "Chi phí (VND)" },
+                    grid: { drawOnChartArea: false },
+                  },
+                },
+              },
+            }
+          );
+
+          const createGroupChart = (canvasId, label, groupKey) => {
+            charts[canvasId] = new Chart(
+              document.getElementById(canvasId).getContext("2d"),
+              {
+                type: "bar",
+                data: {
+                  labels: vendorNames,
+                  datasets: [
+                    {
+                      label: label,
+                      data: vendorNames.map((v, i) => groupScores[i][groupKey]),
+                      backgroundColor: [
+                        "#3b82f6",
+                        "#10b981",
+                        "#f97316",
+                        "#8b5cf6",
+                      ],
+                    },
+                  ],
+                },
+                options: {
+                  responsive: true,
+                  plugins: { legend: { display: false } },
+                  scales: { y: { beginAtZero: true, max: 10 } },
+                },
+              }
+            );
+          };
+
+          createGroupChart("hardwareChart", "Điểm Phần cứng", "A");
+          createGroupChart("softwareChart", "Điểm Phần mềm", "B");
+          createGroupChart("costChart", "Điểm Chi phí", "C");
+          createGroupChart("supportChart", "Điểm Hỗ trợ", "D");
+        }
+
+        document
+          .getElementById("update-charts-btn")
+          .addEventListener("click", updateDashboard);
+
+        document
+          .getElementById("export-btn")
+          .addEventListener("click", function () {
+            const wb = XLSX.utils.book_new();
+            const sheetNames = [
+              "0_HuongDan",
+              "1_ThongTinChung",
+              "2_ChamDiem",
+              "3_PhanCung",
+              "4_PhanMem",
+              "5_ChiPhi",
+              "6_HoTro",
+              "7_Dashboard",
+              "8_SWOT",
+            ];
+            const tableIds = [
+              "table-1",
+              "table-2",
+              "table-3",
+              "table-4",
+              "table-5",
+              "table-6",
+              "table-7-summary",
+              "table-8-swot",
+            ];
+            tableIds.forEach((id, index) => {
+              const table = document.getElementById(id);
+              if (table) {
+                const ws = XLSX.utils.table_to_sheet(table, { raw: true });
+                XLSX.utils.book_append_sheet(wb, ws, sheetNames[index + 1]);
+              }
+            });
+            XLSX.writeFile(wb, "So_Sanh_May_Cham_Cong_FaceID.xlsx");
+          });
+
+        loadAllData();
+        calculateScores();
+        updateEvaluationBasis();
+        document
+          .querySelectorAll('td[contenteditable="true"]')
+          .forEach((cell) => {
+            cell.addEventListener("input", () => {
+              calculateScores();
+              updateEvaluationBasis();
+            });
+          });
+      });
+    </script>
+  </body>
+</html>
