@@ -118,7 +118,6 @@
         </button>
       </div>
 
-      <!-- Tab buttons -->
       <div class="border-b border-gray-200 mb-6">
         <nav class="flex flex-wrap -mb-px" aria-label="Tabs">
           <button class="tab-btn active" data-tab="tab0">0. Chú tích</button>
@@ -137,7 +136,6 @@
         </nav>
       </div>
 
-      <!-- Tab content -->
       <div id="tab-container" class="overflow-x-auto">
         <div id="tab0" class="tab-content active prose max-w-none">
           <h3 class="font-semibold">0. Chú thích</h3>
@@ -153,7 +151,8 @@
             </li>
             <li>
               Điền các thông số chi tiết vào các tab
-              <strong>3, 4, 5, 6</strong>.
+              <strong>3, 4, 5, 6</strong>. Dữ liệu từ các file phản hồi của NCC
+              đã được cập nhật sẵn.
             </li>
             <li>
               Vào <strong>Tab 2 - Bảng Chấm Điểm</strong>, cho điểm từng tiêu
@@ -273,94 +272,189 @@
 
     <script>
       const sampleData = {
-        vendors: ["NCC A", "NCC B", "NCC C", "NCC D"],
+        vendors: ["Tinh Hoa", "HANET", "CMC", "VTI"],
         "table-1": [
-          ["Hạng mục", "NCC A", "NCC B", "NCC C", "NCC D"],
-          ["Nhà cung cấp", "Công ty A", "Công ty B", "Công ty C", "Công ty D"],
+          ["Hạng mục", "Tinh Hoa", "HANET", "CMC", "VTI"],
+          [
+            "Nhà cung cấp",
+            "Công ty Tinh Hoa",
+            "Công ty HANET",
+            "Công ty CMC",
+            "Công ty VTI",
+          ],
           ["Model thiết bị", "", "", "", ""],
         ],
         "table-2-scores": {
-          "Ronald Jack": {
-            A1: 7,
-            A2: 8,
-            A3: 7,
-            B1: 7,
-            B2: 8,
-            B3: 6,
-            C1: 9,
-            C2: 8,
-            D1: 8,
-            D2: 7,
+          "Tinh Hoa": {
+            A1: 0,
+            A2: 0,
+            A3: 0,
+            B1: 0,
+            B2: 0,
+            B3: 0,
+            C1: 0,
+            C2: 0,
+            D1: 0,
+            D2: 0,
           },
-          ZKTeco: {
-            A1: 8,
-            A2: 8,
-            A3: 9,
-            B1: 8,
-            B2: 8,
-            B3: 8,
-            C1: 8,
-            C2: 8,
-            D1: 8,
-            D2: 8,
+          HANET: {
+            A1: 0,
+            A2: 0,
+            A3: 0,
+            B1: 0,
+            B2: 0,
+            B3: 0,
+            C1: 0,
+            C2: 0,
+            D1: 0,
+            D2: 0,
           },
-          Hikvision: {
-            A1: 9,
-            A2: 9,
-            A3: 8,
-            B1: 8,
-            B2: 7,
-            B3: 9,
-            C1: 7,
-            C2: 7,
-            D1: 7,
-            D2: 8,
+          CMC: {
+            A1: 0,
+            A2: 0,
+            A3: 0,
+            B1: 0,
+            B2: 0,
+            B3: 0,
+            C1: 0,
+            C2: 0,
+            D1: 0,
+            D2: 0,
           },
-          Suprema: {
-            A1: 10,
-            A2: 10,
-            A3: 9,
-            B1: 9,
-            B2: 9,
-            B3: 9,
-            C1: 6,
-            C2: 7,
-            D1: 9,
-            D2: 9,
+          VTI: {
+            A1: 0,
+            A2: 0,
+            A3: 0,
+            B1: 0,
+            B2: 0,
+            B3: 0,
+            C1: 0,
+            C2: 0,
+            D1: 0,
+            D2: 0,
           },
         },
         "table-3": [
-          ["Hạng mục", "NCC A", "NCC B", "NCC C", "NCC D"],
-          ["Tốc độ nhận diện", "", "", "", ""],
-          ["Độ chính xác", "", "", "", ""],
-          ["Dung lượng khuôn mặt", "", "", "", ""],
-          ["Dung lượng bản ghi", "", "", "", ""],
-          ["Nhận diện đeo khẩu trang", "", "", "", ""],
-          ["Chống giả mạo (ảnh, video)", "", "", "", ""],
-          ["Kết nối kiểm soát cửa", "", "", "", ""],
+          ["Hạng mục", "Tinh Hoa", "HANET", "CMC", "VTI"],
+          [
+            "Tốc độ nhận diện",
+            "Dưới 0.2s",
+            "0.25s",
+            "Không có thông tin",
+            "Dưới 0.5s",
+          ],
+          ["Độ chính xác", "> 99%", "99.9%", "~99.2%", "> 99.97%"],
+          ["Dung lượng khuôn mặt", "10,000", "50,000", "≥ 10,000", "24,000+"],
+          [
+            "Dung lượng bản ghi",
+            "200,000",
+            "> 200,000 (offline)",
+            "≥ 200,000",
+            "160,000+",
+          ],
+          ["Nhận diện đeo khẩu trang", "Có", "Có", "Có", "Có"],
+          [
+            "Chống giả mạo (ảnh, video)",
+            "Có (Face anti-spoofing)",
+            "Có",
+            "Có",
+            "Có (Liveness detection)",
+          ],
+          [
+            "Độ bền thiết bị (Chuẩn IP)",
+            "IP65",
+            "IP65 (kèm box bảo vệ)",
+            "≥ IP54",
+            "IP65",
+          ],
+          [
+            "Nhận diện kèm đo nhiệt",
+            "Không đáp ứng",
+            "Không sản xuất",
+            "Chưa đáp ứng",
+            "Có (module tùy chọn)",
+          ],
+          [
+            "Kết nối kiểm soát cửa",
+            "Không đề cập",
+            "Không đề cập",
+            "Không đề cập",
+            "Có",
+          ],
         ],
         "table-4": [
-          ["Hạng mục", "NCC A", "NCC B", "NCC C", "NCC D"],
-          ["Phần mềm quản lý", "", "", "", ""],
-          ["Quản lý ca làm việc", "", "", "", ""],
-          ["Báo cáo tùy chỉnh", "", "", "", ""],
-          ["Tích hợp hệ thống khác (API)", "", "", "", ""],
-          ["Ứng dụng di động", "", "", "", ""],
+          ["Hạng mục", "Tinh Hoa", "HANET", "CMC", "VTI"],
+          [
+            "Phần mềm quản lý",
+            "Cloud, Client-Server",
+            "Web (hrm.hanet.ai), Cloud/On-premise",
+            "Phần mềm & App Mobile",
+            "Web (CMS) & App Mobile, Cloud/On-premise",
+          ],
+          [
+            "Quản lý ca làm việc",
+            "Có",
+            "Có (trên HRM)",
+            "Có",
+            "Có (hỗ trợ >300 ca)",
+          ],
+          [
+            "Báo cáo tùy chỉnh",
+            "Có",
+            "Không (chỉ xuất Excel/CSV)",
+            "Không (yêu cầu NCC)",
+            "Hạn chế (yêu cầu VTI)",
+          ],
+          [
+            "Tích hợp hệ thống khác (API)",
+            "Có (API)",
+            "Có (RestFull API, Webhook)",
+            "Có (API)",
+            "Có (API)",
+          ],
+          [
+            "Ứng dụng di động",
+            "Có",
+            "Có (iOS & Android)",
+            "Có (iOS & Android)",
+            "Có (iOS & Android)",
+          ],
+          [
+            "Cổng thông tin nhân viên",
+            "Có (Web Portal)",
+            "Không (chỉ cho Admin/HR)",
+            "Có (qua App Mobile)",
+            "Có (Web & Mobile App)",
+          ],
+          [
+            "Cập nhật firmware từ xa (OTA)",
+            "Không đáp ứng",
+            "Có",
+            "Không (thao tác từ xa được)",
+            "Không (cập nhật qua Web IP)",
+          ],
+          [
+            "Bảo mật dữ liệu (Mã hóa)",
+            "Có (Mã hóa khi lưu trữ và truyền tải)",
+            "Có (AES-256, TLS/HTTPS)",
+            "Không (Lưu ảnh gốc)",
+            "Có (Mã hóa đặc trưng, SSL/HTTPS)",
+          ],
         ],
         "table-5": [
-          ["Khoản mục chi phí", "NCC A", "NCC B", "NCC C", "NCC D"],
+          ["Khoản mục chi phí", "Tinh Hoa", "HANET", "CMC", "VTI"],
           ["Chi phí thiết bị (VND)", "", "", "", ""],
           ["Chi phí bản quyền phần mềm", "", "", "", ""],
           ["Chi phí lắp đặt & triển khai", "", "", "", ""],
         ],
         "table-6": [
-          ["Hạng mục", "NCC A", "NCC B", "NCC C", "NCC D"],
+          ["Hạng mục", "Tinh Hoa", "HANET", "CMC", "VTI"],
           ["Thời gian bảo hành", "", "", "", ""],
           ["Chính sách 1 đổi 1", "", "", "", ""],
           ["Hỗ trợ kỹ thuật", "", "", "", ""],
         ],
         "table-8-swot": [
-          ["Phân tích", "NCC A", "NCC B", "NCC C", "NCC D"],
+          ["Phân tích", "Tinh Hoa", "HANET", "CMC", "VTI"],
           ["Strengths (Điểm mạnh)", "", "", "", ""],
           ["Weaknesses (Điểm yếu)", "", "", "", ""],
           ["Opportunities (Cơ hội)", "", "", "", ""],
@@ -600,7 +694,7 @@
                 `td[data-score-group="${groupKey}"][data-vendor-index="${vendorIndex}"] .score`
               );
               if (groupScoreCell)
-                groupScoreCell.innerText = (currentGroupScore / 10).toFixed(1);
+                groupScoreCell.innerText = currentGroupScore.toFixed(1);
 
               const groupWeight = getCellValue(
                 `td[data-weight-group="${groupKey}"]`
@@ -608,7 +702,7 @@
               groupScores[vendorIndex][groupKey] =
                 groupWeight > 0 ? (currentGroupScore / groupWeight) * 10 : 0;
 
-              currentTotalScore += currentGroupScore / 10;
+              currentTotalScore += currentGroupScore;
             });
             totalScores[vendorIndex] = currentTotalScore;
             const totalScoreCell = document.getElementById(
@@ -621,69 +715,26 @@
         }
 
         function updateEvaluationBasis() {
-          const vendors = sampleData.vendors;
-
-          const speedData = sampleData["table-3"].find((r) =>
-            r[0].includes("Tốc độ")
-          );
-          document.querySelector('[data-basis-for="A1"]').innerHTML =
-            "<strong>Cơ sở (Tab 3):</strong> " +
-            vendors.map((v, i) => `${v}: ${speedData[i + 1]}`).join("; ");
-
-          const faceCapacityData = sampleData["table-3"].find((r) =>
-            r[0].includes("Dung lượng khuôn mặt")
-          );
-          document.querySelector('[data-basis-for="A3"]').innerHTML =
-            "<strong>Cơ sở (Tab 3):</strong> " +
-            vendors
-              .map((v, i) => `${v}: ${faceCapacityData[i + 1]}`)
-              .join("; ");
-
-          const apiData = sampleData["table-4"].find((r) =>
-            r[0].includes("Tích hợp")
-          );
-          document.querySelector('[data-basis-for="B3"]').innerHTML =
-            "<strong>Cơ sở (Tab 4):</strong> " +
-            vendors.map((v, i) => `${v}: ${apiData[i + 1]}`).join("; ");
-
-          const costDevice = sampleData["table-5"].find((r) =>
-            r[0].includes("thiết bị")
-          );
-          const costInstall = sampleData["table-5"].find((r) =>
-            r[0].includes("lắp đặt")
-          );
-          document.querySelector('[data-basis-for="C1"]').innerHTML =
-            "<strong>Cơ sở (Tab 5):</strong> " +
-            vendors
-              .map(
-                (v, i) =>
-                  `${v}: ${(
-                    parseInt(costDevice[i + 1].replace(/,/g, "")) +
-                    parseInt(costInstall[i + 1].replace(/,/g, ""))
-                  ).toLocaleString("vi-VN")}đ`
-              )
-              .join("; ");
-
-          const warrantyData = sampleData["table-6"].find((r) =>
-            r[0].includes("bảo hành")
-          );
-          document.querySelector('[data-basis-for="D1"]').innerHTML =
-            "<strong>Cơ sở (Tab 6):</strong> " +
-            vendors.map((v, i) => `${v}: ${warrantyData[i + 1]}`).join("; ");
+          // This function could be enhanced to dynamically pull data
+          // from the other tables, but for now, it's static.
         }
 
         let charts = {};
         function updateDashboard() {
           const vendorNames = sampleData.vendors;
           const { totalScores, groupScores } = calculateScores();
-          const costDevice = sampleData["table-5"]
-            .find((r) => r[0].includes("thiết bị"))
-            .slice(1)
-            .map((c) => parseInt(c.replace(/,/g, "")));
-          const costInstall = sampleData["table-5"]
-            .find((r) => r[0].includes("lắp đặt"))
-            .slice(1)
-            .map((c) => parseInt(c.replace(/,/g, "")));
+
+          const getCostData = (tableName, rowIndex) => {
+            const tableData = sampleData[tableName];
+            if (!tableData || tableData.length <= rowIndex)
+              return vendorNames.map(() => 0);
+            return tableData[rowIndex]
+              .slice(1)
+              .map((c) => parseInt(c.toString().replace(/,/g, "")) || 0);
+          };
+
+          const costDevice = getCostData("table-5", 1);
+          const costInstall = getCostData("table-5", 3);
           const totalCost = costDevice.map((c, i) => c + costInstall[i]);
 
           Object.values(charts).forEach((chart) => chart.destroy());
@@ -732,7 +783,8 @@
                     data: totalCost,
                     backgroundColor: "rgba(239, 68, 68, 0.7)",
                     yAxisID: "y-tco",
-                    order: 2,
+                    type: "line",
+                    order: 0,
                   },
                 ],
               },
@@ -758,7 +810,7 @@
             }
           );
 
-          const createGroupChart = (canvasId, label, groupKey) => {
+          const createGroupChart = (canvasId, label, groupKey, color) => {
             charts[canvasId] = new Chart(
               document.getElementById(canvasId).getContext("2d"),
               {
@@ -769,28 +821,27 @@
                     {
                       label: label,
                       data: vendorNames.map((v, i) => groupScores[i][groupKey]),
-                      backgroundColor: [
-                        "#3b82f6",
-                        "#10b981",
-                        "#f97316",
-                        "#8b5cf6",
-                      ],
+                      backgroundColor: color,
                     },
                   ],
                 },
                 options: {
+                  indexAxis: "y",
                   responsive: true,
-                  plugins: { legend: { display: false } },
-                  scales: { y: { beginAtZero: true, max: 10 } },
+                  plugins: {
+                    legend: { display: false },
+                    title: { display: true, text: label },
+                  },
+                  scales: { x: { beginAtZero: true, max: 10 } },
                 },
               }
             );
           };
 
-          createGroupChart("hardwareChart", "Điểm Phần cứng", "A");
-          createGroupChart("softwareChart", "Điểm Phần mềm", "B");
-          createGroupChart("costChart", "Điểm Chi phí", "C");
-          createGroupChart("supportChart", "Điểm Hỗ trợ", "D");
+          createGroupChart("hardwareChart", "Điểm Phần cứng", "A", "#3b82f6");
+          createGroupChart("softwareChart", "Điểm Phần mềm", "B", "#10b981");
+          createGroupChart("costChart", "Điểm Chi phí", "C", "#f97316");
+          createGroupChart("supportChart", "Điểm Hỗ trợ", "D", "#8b5cf6");
         }
 
         document
@@ -801,6 +852,32 @@
           .getElementById("export-btn")
           .addEventListener("click", function () {
             const wb = XLSX.utils.book_new();
+
+            // Function to get data from a table element, handling editable cells
+            const getTableData = (tableEl) => {
+              const data = [];
+              // Get headers
+              const headers = [];
+              tableEl
+                .querySelectorAll("thead th")
+                .forEach((th) => headers.push(th.innerText));
+              data.push(headers);
+              // Get rows
+              tableEl.querySelectorAll("tbody tr").forEach((tr) => {
+                const row = [];
+                tr.querySelectorAll("td").forEach((td) => {
+                  // For score cells, get the calculated value
+                  if (td.querySelector(".score")) {
+                    row.push(td.querySelector(".score").innerText);
+                  } else {
+                    row.push(td.innerText);
+                  }
+                });
+                data.push(row);
+              });
+              return data;
+            };
+
             const sheetNames = [
               "0_HuongDan",
               "1_ThongTinChung",
@@ -813,6 +890,7 @@
               "8_SWOT",
             ];
             const tableIds = [
+              null, // No table for instructions
               "table-1",
               "table-2",
               "table-3",
@@ -822,11 +900,29 @@
               "table-7-summary",
               "table-8-swot",
             ];
+
+            // Manual sheet for instructions
+            const intro_ws = XLSX.utils.aoa_to_sheet([
+              ["Công cụ So sánh Giải pháp Máy chấm công Face ID"],
+              [""],
+              ["Hướng dẫn sử dụng:"],
+              ["1. Điền thông tin chi tiết vào các tab 3, 4, 5, 6."],
+              [
+                "2. Vào Tab 2 - Bảng Chấm Điểm, cho điểm từng tiêu chí (thang 0-10).",
+              ],
+              ["3. Vào Tab 7 - Dashboard và nhấn 'Cập nhật' để xem biểu đồ."],
+              ["4. Bảng này được tạo ra từ công cụ web."],
+            ]);
+            XLSX.utils.book_append_sheet(wb, intro_ws, sheetNames[0]);
+
             tableIds.forEach((id, index) => {
-              const table = document.getElementById(id);
-              if (table) {
-                const ws = XLSX.utils.table_to_sheet(table, { raw: true });
-                XLSX.utils.book_append_sheet(wb, ws, sheetNames[index + 1]);
+              if (id) {
+                const table = document.getElementById(id);
+                if (table) {
+                  const tableData = getTableData(table);
+                  const ws = XLSX.utils.aoa_to_sheet(tableData);
+                  XLSX.utils.book_append_sheet(wb, ws, sheetNames[index]);
+                }
               }
             });
             XLSX.writeFile(wb, "So_Sanh_May_Cham_Cong_FaceID.xlsx");
@@ -836,12 +932,14 @@
         calculateScores();
         updateEvaluationBasis();
         document
-          .querySelectorAll('td[contenteditable="true"]')
-          .forEach((cell) => {
-            cell.addEventListener("input", () => {
-              calculateScores();
-              updateEvaluationBasis();
-            });
+          .getElementById("tab-container")
+          .addEventListener("input", (e) => {
+            if (e.target.matches('td[contenteditable="true"]')) {
+              // A bit of a delay to let the value update before recalculating
+              setTimeout(() => {
+                calculateScores();
+              }, 100);
+            }
           });
       });
     </script>
